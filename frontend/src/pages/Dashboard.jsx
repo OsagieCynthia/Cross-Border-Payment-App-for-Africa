@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import { usePullToRefresh } from '../hooks/usePullToRefresh';
 import PINSetupModal from '../components/PINSetupModal';
 import { usePushNotifications } from '../hooks/usePushNotifications';
-import { getQueueCount } from '../utils/offlineDB';
+import { getQueueCountForUser } from '../utils/offlineDB';
 
 const IS_TESTNET = process.env.REACT_APP_STELLAR_NETWORK !== 'mainnet';
 const MAX_WALLETS = 5;
@@ -276,11 +276,11 @@ export default function Dashboard() {
   useEffect(() => {
     loadDashboard();
     if (!isOnline) {
-      getQueueCount()
+      getQueueCountForUser(user?.id)
         .then(setQueueCount)
         .catch(() => {});
     }
-  }, [loadDashboard, isOnline]);
+  }, [loadDashboard, isOnline, user?.id]);
 
   const copyAddress = async () => {
     if (!wallet?.public_key) return;
